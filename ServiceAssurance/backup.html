@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Tiket</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 960px;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        div {
+            margin-bottom: 10px;
+        }
+        strong {
+            font-weight: bold;
+        }
+        button, select {
+            padding: 8px 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover, select:hover {
+            background-color: #2980b9;
+        }
+        select {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+    </style>
+    <script src="TicketUser.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div id="ticketDetails"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const params = new URLSearchParams(window.location.search);
+            const ticketId = params.get('id');
+            const ticket = tickets.find(t => t.id === ticketId);
+            if (ticket) {
+                const details = document.getElementById('ticketDetails');
+                details.innerHTML = `
+                    <h1>Detail Tiket</h1>
+                    <div><strong>ID Tiket:</strong> ${ticket.id}</div>
+                    <div><strong>Judul:</strong> ${ticket.title}</div>
+                    <div><strong>Status:</strong> ${ticket.status}</div>
+                    <div><strong>Tanggal Dibuat:</strong> ${ticket.date}</div>
+                    <div><strong>Deskripsi:</strong> ${ticket.description}</div>
+                    <div>
+                        <label for="technician">Pilih Teknisi:</label>
+                        <select id="technician">
+                            <option value="tech1">Teknisi 1</option>
+                            <option value="tech2">Teknisi 2</option>
+                            <option value="tech3">Teknisi 3</option>
+                        </select>
+                        <button onclick="assignTechnician('${ticket.id}')">Tugaskan Teknisi</button>
+                    </div>
+                `;
+            }
+        });
+
+        function assignTechnician(ticketId) {
+            const technician = document.getElementById('technician').value;
+            localStorage.setItem(`ticketTechnician-${ticketId}`, technician);
+            updateTicketStatus(ticketId, 'In Progress'); // Ubah status menjadi "In Progress"
+            localStorage.setItem(`ticketStatus-${ticketId}`, 'In Progress');
+            alert(`Teknisi ${technician} telah ditugaskan untuk tiket ${ticketId} dan status diperbarui menjadi "In Progress".`);
+            window.location.href = 'ManajemenTicket.html';  // Redirect ke halaman manajemen tiket
+        }
+    </script>
+</body>
+</html>

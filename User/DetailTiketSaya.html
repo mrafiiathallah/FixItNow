@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Tiket</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+        }
+
+        .background-container {
+            background-image: url('navbar.svg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            padding-bottom: 20px;
+            height: 200px;
+        }
+
+        .navbar {
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            position: relative;
+            height: 35px; /* Keep the height of the navbar */
+            overflow: visible; /* Allow the logo to overflow */
+        }
+
+        .navbar-brand img {
+            left: -10px;
+            height: 200px; /* Set the desired height of the logo */
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        .navbar-icons {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-icons i {
+            color: white;
+            margin-left: 30px;
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 40px;
+            background-color: #fff;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 5px;
+            padding: 10px;
+            width: 150px;
+        }
+
+        .user-dropdown button {
+            color: black;
+            padding: 8px 12px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            border: none;
+            background: none;
+            width: 100%;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .user-dropdown button:hover {
+            background-color: #f1f1f1;
+        }
+
+        .user-dropdown button i {
+            margin-left: auto;
+            font-size: 1.25rem;
+            color: #6c757d;
+        }
+
+        .sidebar {
+            width: 240px;
+            height: calc(100vh - 65px);
+            position: fixed;
+            top: 50px;
+            left: 0;
+            background-color: #fff;
+            border-right: 1px solid #ddd;
+            border-top-right-radius: 15px;
+            padding: 20px 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar .user-info {
+            text-align: center;
+        }
+
+        .sidebar .user-info img {
+            border-radius: 50%;
+            height: 80px;
+            width: 80px;
+            margin-bottom: 10px;
+        }
+
+        .sidebar .user-info .user-details {
+            font-size: 14px;
+        }
+
+        .sidebar .user-info .user-details span {
+            display: block;
+        }
+
+        .sidebar .nav-link {
+            color: #333;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 5px 0;
+            text-decoration: none;
+        }
+
+        .sidebar .nav-link.active,
+        .sidebar .nav-link:hover {
+            background-color: #f8d7da;
+            color: #dc3545;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            color: #007bff;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .back-button i {
+            margin-right: 8px;
+        }
+
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .ticket-header .left-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .ticket-header .left-section img {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+        }
+
+        .ticket-header .right-section .status {
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #fff;
+            display: inline-block;
+        }
+
+        .ticket-body {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .ticket-body img {
+            max-width: 150px;
+            border-radius: 8px;
+            margin-right: 20px;
+        }
+
+        .ticket-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ticket-actions .buttons {
+            display: flex;
+            align-items: center;
+        }
+
+        .ticket-actions .buttons button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+            margin-right: 10px;
+        }
+
+        .ticket-actions .buttons button:hover {
+            background-color: #0056b3;
+        }
+
+        .ticket-actions .history {
+            color: #6c757d;
+        }
+
+        .status.new {
+            background: #007bff;
+        }
+
+        .status.assigned {
+            background: #17a2b8;
+        }
+
+        .status.in-progress {
+            background: #ffc107;
+        }
+
+        .status.resolve {
+            background: #28a745;
+        }
+
+        .status.confirmation {
+            background: #fd7e14;
+        }
+
+        .status.on-hold {
+            background: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="background-container">
+        <nav class="navbar navbar-light">
+            <a class="navbar-brand" href="#">
+                <img src="Logo3.svg" alt="Service Desk Logo">
+            </a>
+            <div class="navbar-icons">
+                <i class="fas fa-bell"></i>
+                <i class="fas fa-user" id="userIcon"></i>
+                <div id="userDropdown" class="user-dropdown">
+                    <button type="button" onclick="showModal()">Log Out <i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="sidebar">
+            <div class="user-info">
+                <img src="user.jpg" alt="User Photo">
+                <div class="user-details">
+                    <span>Akmal Sidki Razaka</span>
+                </div>
+            </div>
+            <nav class="nav flex-column mt-4">
+                <a class="nav-link" href="Beranda.html"><i class="fas fa-home"></i> Beranda</a>
+                <a class="nav-link" href="TiketBaru.html"><i class="fas fa-ticket-alt"></i> Tiket Baru</a>
+                <a class="nav-link active" href="TiketSaya.html"><i class="fas fa-tasks"></i> Tiket Saya</a>
+                <a class="nav-link" href="TiketSelesai.html"><i class="fas fa-check-circle"></i> Tiket Selesai</a>
+            </nav>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <div class="back-button" onclick="window.location.href='TiketSaya.html'">
+                <i class="fas fa-arrow-left"></i> Kembali
+            </div>
+            <div class="ticket-header">
+                <div class="left-section">
+                    <img src="user.jpg" alt="User Image">
+                    <div>
+                        <h5 id="ticket-id"></h5>
+                        <p id="ticket-date"></p>
+                        <p id="ticket-category"></p>
+                    </div>
+                </div>
+                <div class="right-section">
+                    <div class="status" id="ticket-status"></div>
+                </div>
+            </div>
+            <div class="ticket-body">
+                <img id="ticket-image" alt="Screenshot">
+                <p id="ticket-description"></p>
+            </div>
+            <div class="ticket-actions">
+                <div class="buttons">
+                    <button>Tandai Tutup</button>
+                    <button id="startMessaging">Start Messaging</button>
+                </div>
+                <div class="history" id="ticket-history"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <i class="fas fa-sign-out-alt fa-3x text-danger mb-3"></i>
+                    <p>Are you sure you want to log out?</p>
+                    <button type="button" class="btn btn-danger" onclick="logout()">Log Out</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="tickets.js"></script>
+    <script>
+        function logout() {
+            window.location.href = "Login.html";
+        }
+
+        document.getElementById('userIcon').addEventListener('click', function () {
+            var dropdown = document.getElementById('userDropdown');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        });
+
+        function showModal() {
+            var myModal = new bootstrap.Modal(document.getElementById('userModal'), {
+                keyboard: false
+            });
+            myModal.show();
+            document.getElementById('userDropdown').style.display = 'none';
+        }
+
+        window.onclick = function (event) {
+            if (!event.target.matches('.fas.fa-user')) {
+                var dropdowns = document.getElementsByClassName("user-dropdown");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.style.display === 'block') {
+                        openDropdown.style.display = 'none';
+                    }
+                }
+            }
+        };
+
+        function updateTicketDetails(ticket) {
+            document.getElementById('ticket-id').textContent = '#' + ticket.id;
+            document.getElementById('ticket-date').textContent = 'Dibuat pada ' + ticket.date;
+            document.getElementById('ticket-category').textContent = ticket.category;
+            document.getElementById('ticket-status').textContent = ticket.status.text;
+            document.getElementById('ticket-status').className = 'status ' + ticket.status.class;
+            document.getElementById('ticket-description').textContent = ticket.description;
+            document.getElementById('ticket-image').src = ticket.image;
+            document.getElementById('ticket-history').textContent = 'Pembaruan terakhir ' + ticket.date;
+        }
+
+        const selectedTicketId = localStorage.getItem('selectedTicketId');
+        const selectedTicket = getTicketById(selectedTicketId);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (selectedTicket) {
+                updateTicketDetails(selectedTicket);
+            } else {
+                alert('Tiket tidak ditemukan');
+            }
+        });
+
+        document.getElementById('startMessaging').addEventListener('click', function() {
+            window.location.href = 'Chat.html';
+        });
+    </script>
+</body>
+</html>

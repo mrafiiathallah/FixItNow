@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Digitalisasi Tanda Tangan</title>
+    <style>
+        /* Gaya untuk badan halaman */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        /* Gaya untuk header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+        }
+
+        header img {
+            height: 50px;
+        }
+
+        header nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        header nav a {
+            text-decoration: none;
+            color: #000000;
+            font-weight: bold;
+        }
+
+        header .profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        header .profile img {
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        /* Gaya untuk bagian utama */
+        main {
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        main h1 {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .user-info button {
+            background-color: #FF0000;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .document-status {
+            display: flex;
+            justify-content: space-around;
+            margin: 40px 0;
+        }
+
+        .status-card {
+            border: 2px solid #FF0000;
+            border-radius: 10px;
+            padding: 20px;
+            width: 200px;
+            text-align: center;
+        }
+
+        .status-card h2 {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .status-card p {
+            font-size: 14px;
+            color: #666666;
+        }
+
+        .status-card .count {
+            font-size: 36px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .latest-documents {
+            background-color: #f2f2f2;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 40px;
+            text-align: left;
+        }
+
+        .latest-documents h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .latest-documents p {
+            font-size: 14px;
+        }
+
+        .latest-documents a {
+            color: #FF0000;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="logo-telkom-indonesia.png" alt="Telkom Indonesia Logo">
+        <nav>
+            <a href="#">Unggah</a>
+            <a href="#">Status</a>
+            <a href="#">Riwayat</a>
+        </nav>
+        <div class="profile">
+            <span>Welcome, Mrs. Rina</span>
+            <img src="profile-picture.png" alt="Profile Picture">
+        </div>
+    </header>
+
+    <main>
+        <h1>Selamat Datang Kembali, Rina Susanti</h1>
+        <div class="user-info">
+            <button>PT Telkom Indonesia</button>
+            <button>Administrasi</button>
+        </div>
+        <div class="document-status">
+            <div class="status-card">
+                <h2>Sedang Diproses</h2>
+                <p>Jumlah Dokumen</p>
+                <div class="count">10</div>
+            </div>
+            <div class="status-card">
+                <h2>Selesai</h2>
+                <p>Jumlah Dokumen</p>
+                <div class="count">5</div>
+            </div>
+            <div class="status-card">
+                <h2>Ditolak</h2>
+                <p>Jumlah Dokumen</p>
+                <div class="count">2</div>
+            </div>
+        </div>
+        <button class="upload-button">Unggah Dokumen</button>
+        <div class="latest-documents">
+            <h3>Status dokumen terbaru:</h3>
+            <p>Anda belum mengajukan dokumen terbaru. Periksa dokumen terdahulu dengan mengakses menu <a href="#">Riwayat</a>.</p>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat dengan Pusat Bantuan</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .background-container {
+            background-image: url('Navbar.svg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            padding-bottom: 20px;
+            height: 200px;
+        }
+
+        .navbar-brand {
+            position: relative;
+            height: 35px; /* Keep the height of the navbar */
+            overflow: visible; /* Allow the logo to overflow */
+        }
+
+        .navbar-brand img {
+            left: -10px;
+            height: 200px; /* Set the desired height of the logo */
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        .navbar-icons {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-icons i {
+            color: white;
+            margin-left: 30px;
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 40px;
+            background-color: #fff;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 5px;
+            padding: 10px;
+            width: 150px;
+        }
+
+        .user-dropdown button {
+            color: black;
+            padding: 8px 12px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            border: none;
+            background: none;
+            width: 100%;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .user-dropdown button:hover {
+            background-color: #f1f1f1;
+        }
+
+        .user-dropdown button i {
+            margin-left: auto;
+            font-size: 1.25rem;
+            color: #6c757d;
+        }
+
+        .sidebar {
+            width: 240px;
+            height: calc(100vh - 65px);
+            position: fixed;
+            top: 50px;
+            left: 0;
+            background-color: #fff;
+            border-right: 1px solid #ddd;
+            border-top-right-radius: 15px;
+            padding: 20px 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar .user-info {
+            text-align: center;
+        }
+
+        .sidebar .user-info img {
+            border-radius: 50%;
+            height: 80px;
+            width: 80px;
+            margin-bottom: 10px;
+        }
+
+        .sidebar .user-info .user-details {
+            font-size: 14px;
+        }
+
+        .sidebar .user-info .user-details span {
+            display: block;
+        }
+
+        .sidebar .nav-link {
+            color: #333;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 5px 0;
+            text-decoration: none;
+        }
+
+        .sidebar .nav-link.active,
+        .sidebar .nav-link:hover {
+            background-color: #f8d7da;
+            color: #dc3545;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+
+        .chat-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-header {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .chat-box {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .chat-message {
+            margin-bottom: 20px;
+        }
+
+        .chat-message.user {
+            text-align: right;
+        }
+
+        .chat-message .message-content {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 20px;
+            background: #007bff;
+            color: white;
+            max-width: 80%;
+        }
+
+        .chat-message.user .message-content {
+            background: #17a2b8;
+        }
+
+        .chat-footer {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .chat-footer input {
+            flex-grow: 1;
+            border-radius: 20px;
+            padding: 10px 20px;
+            border: 1px solid #ddd;
+            margin-right: 10px;
+        }
+
+        .chat-footer button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .chat-footer button:hover {
+            background: #0056b3;
+        }
+
+        .file-input-container {
+            display: flex;
+            align-items: center;
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .file-input-container img {
+            height: 32px;
+            width: 32px;
+            margin-right: 10px;
+        }
+
+        .file-input-container .file-name {
+            flex-grow: 1;
+            font-size: 14px;
+        }
+
+        .file-input-container .file-remove {
+            cursor: pointer;
+            color: #dc3545;
+            font-size: 18px;
+            margin-left: 10px;
+        }
+
+        #chatInput {
+            flex-grow: 1;
+            border-radius: 20px;
+            padding: 10px 20px;
+            border: 1px solid #ddd;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="background-container">
+        <nav class="navbar navbar-light">
+            <a class="navbar-brand" href="#">
+                <img src="Logo3.svg" alt="Service Desk Logo">
+            </a>
+            <div class="navbar-icons">
+                <i class="fas fa-bell"></i>
+                <i class="fas fa-user" id="userIcon"></i>
+                <div id="userDropdown" class="user-dropdown">
+                    <button type="button" onclick="showModal()">Log Out <i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="sidebar">
+            <div class="user-info">
+                <img src="user.jpg" alt="User Photo">
+                <div class="user-details">
+                    <span>Akmal Sidki Razaka</span>
+                </div>
+            </div>
+            <nav class="nav flex-column mt-4">
+                <a class="nav-link" href="Beranda.html"><i class="fas fa-home"></i> Beranda</a>
+                <a class="nav-link" href="TiketBaru.html"><i class="fas fa-ticket-alt"></i> Tiket Baru</a>
+                <a class="nav-link active" href="TiketSaya.html"><i class="fas fa-tasks"></i> Tiket Saya</a>
+                <a class="nav-link" href="TiketSelesai.html"><i class="fas fa-check-circle"></i> Tiket Selesai</a>
+            </nav>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="chat-container">
+            <div class="chat-header">
+                Chat dengan Pusat Bantuan
+                <i class="fas fa-times close-chat" id="closeChat" style="cursor: pointer; float: right;"></i>
+            </div>
+            <div class="chat-box" id="chatBox">
+                <!-- Dynamic chat messages will be inserted here -->
+            </div>
+            <div class="chat-footer">
+    <input type="file" id="fileInput" style="display: none;">
+    <button id="attachFile" style="margin-right: 10px;"><i class="fas fa-plus"></i></button>
+    <div class="file-input-container" id="filePlaceholder" style="display: none;">
+        <img src="file-icon.png" alt="File Icon">
+        <div class="file-name" id="fileName"></div>
+        <div class="file-remove" id="removeFile">&times;</div>
+    </div>
+    <input type="text" id="chatInput" placeholder="Tulis pesan">
+    <button id="sendMessage"><i class="fas fa-paper-plane"></i></button>
+</div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <i class="fas fa-sign-out-alt fa-3x text-danger mb-3"></i>
+                    <p>Are you sure you want to log out?</p>
+                    <button type="button" class="btn btn-danger" onclick="logout()">Log Out</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="tickets.js"></script>
+    <script>
+        function logout() {
+            window.location.href = "Login.html";
+        }
+
+        document.getElementById('userIcon').addEventListener('click', function () {
+            var dropdown = document.getElementById('userDropdown');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        });
+
+        function showModal() {
+            var myModal = new bootstrap.Modal(document.getElementById('userModal'), {
+                keyboard: false
+            });
+            myModal.show();
+            document.getElementById('userDropdown').style.display = 'none';
+        }
+
+        window.onclick = function (event) {
+            if (!event.target.matches('.fas.fa-user')) {
+                var dropdowns = document.getElementsByClassName("user-dropdown");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.style.display === 'block') {
+                        openDropdown.style.display = 'none';
+                    }
+                }
+            }
+        };
+
+        document.getElementById('closeChat').addEventListener('click', function () {
+            window.location.href = 'DetailTiketSaya.html';
+        });
+
+        function getChatMessage(ticket) {
+            return `
+                <div class="chat-message">
+                    <div class="message-content">
+                        ${ticket.user} - ${ticket.title}<br>
+                        ${ticket.description}
+                    </div>
+                </div>
+            `;
+        }
+
+        function createUserMessage(content, time) {
+            return `
+                <div class="chat-message user">
+                    <div class="message-content">
+                        ${content}
+                    </div>
+                    <div class="message-time">
+                        ${time}
+                    </div>
+                </div>
+            `;
+        }
+
+        const selectedTicketId = localStorage.getItem('selectedTicketId');
+        const selectedTicket = getTicketById(selectedTicketId);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (selectedTicket) {
+                const chatBox = document.getElementById('chatBox');
+                chatBox.innerHTML = getChatMessage(selectedTicket);
+            } else {
+                alert('Tiket tidak ditemukan');
+            }
+        });
+
+        document.getElementById('sendMessage').addEventListener('click', () => {
+            const chatInput = document.getElementById('chatInput');
+            const message = chatInput.value;
+            if (message.trim()) {
+                const chatBox = document.getElementById('chatBox');
+                const currentTime = new Date().toLocaleString('id-ID', {
+                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+                    hour: '2-digit', minute: '2-digit', second: '2-digit'
+                });
+                chatBox.innerHTML += createUserMessage(message, currentTime);
+                chatInput.value = '';
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+        });
+
+        document.getElementById('attachFile').addEventListener('click', function () {
+            document.getElementById('fileInput').click();
+        });
+
+        document.getElementById('fileInput').addEventListener('change', function () {
+            const file = this.files[0];
+            const fileName = file.name;
+            const filePlaceholder = document.getElementById('filePlaceholder');
+            const fileNameElement = document.getElementById('fileName');
+
+            fileNameElement.textContent = fileName;
+            filePlaceholder.style.display = 'flex';
+        });
+
+        document.getElementById('removeFile').addEventListener('click', function () {
+            const fileInput = document.getElementById('fileInput');
+            const filePlaceholder = document.getElementById('filePlaceholder');
+
+            fileInput.value = '';
+            filePlaceholder.style.display = 'none';
+        });
+    </script>
+</body>
+
+</html>

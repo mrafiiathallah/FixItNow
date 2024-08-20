@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Tiket</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* CSS yang sudah ada tetap sama */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+        }
+
+        .background-container {
+            background-image: url('navbar.svg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            padding-bottom: 20px;
+            height: 200px;
+        }
+
+        .navbar {
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand img {
+            height: 30px;
+            cursor: pointer;
+        }
+
+        .navbar-icons {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-icons i {
+            color: white;
+            margin-left: 30px;
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+
+        .sidebar {
+            width: 250px;
+            height: calc(100vh - 65px);
+            position: fixed;
+            top: 63px;
+            left: 0;
+            background-color: #fff;
+            border-right: 1px solid #ddd;
+            border-top-right-radius: 15px;
+            padding: 20px 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar .user-info {
+            text-align: center;
+        }
+
+        .sidebar .user-info img {
+            border-radius: 50%;
+            height: 80px;
+            width: 80px;
+            margin-bottom: 10px;
+        }
+
+        .sidebar .nav-link {
+            color: #333;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 5px 0;
+            text-decoration: none;
+        }
+
+        .sidebar .nav-link.active,
+        .sidebar .nav-link:hover {
+            background-color: #f8d7da;
+            color: #dc3545;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            color: #007bff;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .back-button i {
+            margin-right: 8px;
+        }
+
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .ticket-header .left-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .ticket-header .left-section img {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+        }
+
+        .ticket-header .right-section .status {
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #fff;
+            display: inline-block;
+        }
+
+        .ticket-body {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .ticket-body img {
+            max-width: 150px;
+            border-radius: 8px;
+            margin-right: 20px;
+        }
+
+        .ticket-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ticket-actions .buttons {
+            display: flex;
+            align-items: center;
+        }
+
+        .ticket-actions .buttons button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+            margin-right: 10px;
+        }
+
+        .ticket-actions .buttons button:hover {
+            background-color: #0056b3;
+        }
+
+        .ticket-actions .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .ticket-actions .dropdown select {
+            background-color: white;
+            color: black;
+            border: 1px solid #ccc;
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            margin-right: 10px;
+            width: 200px;
+        }
+
+        .ticket-actions .dropdown select:hover {
+            background-color: #f1f1f1;
+            border: 1px solid #aaa;
+        }
+
+        .ticket-actions .dropdown::after {
+            content: '\f078';
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        .ticket-actions .history {
+            color: #6c757d;
+        }
+
+        .status.new {
+            background: #007bff;
+        }
+
+        .status.assigned {
+            background: #17a2b8;
+        }
+
+        .status.in-progress {
+            background: #ffc107;
+        }
+
+        .status.resolve {
+            background: #28a745;
+        }
+
+        .status.confirmation {
+            background: #fd7e14;
+        }
+
+        .status.on-hold {
+            background: #6c757d;
+        }
+    </style>
+    <script src="TicketUser.js"></script>
+</head>
+
+<body>
+    <div class="background-container">
+        <nav class="navbar navbar-light">
+            <a class="navbar-brand" href="#">
+                <img src="Logo3.svg" alt="Service Desk Logo">
+            </a>
+            <div class="navbar-icons">
+                <i class="fas fa-bell"></i>
+                <i class="fas fa-user" id="userIcon"></i>
+            </div>
+        </nav>
+
+        <div class="sidebar">
+            <div class="user-info">
+                <img src="user.jpg" alt="User Photo">
+                <div class="user-details">
+                    <span>Service Assurance</span>
+                </div>
+            </div>
+            <nav class="nav flex-column mt-4">
+                <a class="nav-link" href="Beranda.html"><i class="fas fa-home"></i> Beranda</a>
+                <a class="nav-link active" href="ManajemenTicket.html"><i class="fas fa-tasks"></i> Manajemen Tiket</a>
+            </nav>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <div class="back-button" onclick="window.location.href='ManajemenTicket.html'">
+                <i class="fas fa-arrow-left"></i> Kembali
+            </div>
+            <div class="ticket-header">
+                <div class="left-section">
+                    <img src="user.jpg" alt="User Image">
+                    <div>
+                        <h5 id="ticket-id"></h5>
+                        <p id="ticket-date"></p>
+                        <p id="ticket-category"></p>
+                    </div>
+                </div>
+                <div class="right-section">
+                    <div class="status" id="ticket-status"></div>
+                </div>
+            </div>
+            <div class="ticket-body">
+                <img id="ticket-image" alt="Screenshot">
+                <p id="ticket-description"></p>
+            </div>
+            <div class="ticket-actions">
+                <div id="actions" class="buttons">
+                    <div class="dropdown" id="technician-dropdown">
+                        <select id="technician">
+                            <option value="" disabled selected>Pilih Teknisi</option>
+                            <option value="tech1">Teknisi 1</option>
+                            <option value="tech2">Teknisi 2</option>
+                            <option value="tech3">Teknisi 3</option>
+                        </select>
+                    </div>
+                    <button id="assignTechnicianButton">Tugaskan Teknisi</button>
+                </div>
+                <div class="history" id="ticket-history"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const params = new URLSearchParams(window.location.search);
+            const ticketId = params.get('id');
+            const ticket = tickets.find(t => t.id === ticketId);
+
+            if (ticket) {
+                document.getElementById('ticket-id').textContent = '#' + ticket.id;
+                document.getElementById('ticket-date').textContent = 'Dibuat pada ' + ticket.date;
+                document.getElementById('ticket-category').textContent = ticket.category;
+
+                // Ambil status terbaru dari localStorage jika ada
+                const updatedStatus = localStorage.getItem(`ticketStatus-${ticketId}`);
+                if (updatedStatus) {
+                    ticket.status = updatedStatus;
+                }
+
+                // Tentukan kelas status berdasarkan status tiket
+                let statusClass = '';
+                switch (ticket.status) {
+                    case 'New Ticket':
+                        statusClass = 'status new';
+                        break;
+                    case 'Assigned':
+                        statusClass = 'status assigned';
+                        break;
+                    case 'In Progress':
+                        statusClass = 'status in-progress';
+                        updateActionsForInProgress(ticketId); // Update UI jika status In Progress
+                        break;
+                    case 'Resolve':
+                        statusClass = 'status resolve';
+                        break;
+                    case 'Confirmation':
+                        statusClass = 'status confirmation';
+                        break;
+                    case 'On Hold':
+                        statusClass = 'status on-hold';
+                        updateActionsForOnHold(ticketId); // Update UI jika status On Hold
+                        break;
+                }
+
+                // Terapkan kelas dan teks status ke elemen
+                document.getElementById('ticket-status').className = statusClass;
+                document.getElementById('ticket-status').textContent = ticket.status;
+                document.getElementById('ticket-description').textContent = ticket.description;
+                document.getElementById('ticket-image').src = ticket.image;
+            }
+
+            document.getElementById('assignTechnicianButton').onclick = function () {
+                assignTechnician(ticketId);
+            };
+        });
+
+        function assignTechnician(ticketId) {
+            const technician = document.getElementById('technician').value;
+            if (technician) {
+                localStorage.setItem(`ticketTechnician-${ticketId}`, technician);
+                localStorage.setItem(`ticketStatus-${ticketId}`, 'In Progress');
+                alert(`Teknisi ${technician} telah ditugaskan untuk tiket ${ticketId} dan status diperbarui menjadi "In Progress".`);
+
+                // Perbarui UI setelah status tiket diubah menjadi In Progress
+                updateStatus('In Progress');
+                updateActionsForInProgress(ticketId);
+            } else {
+                alert('Silakan pilih teknisi terlebih dahulu.');
+            }
+        }
+
+        function updateStatus(newStatus) {
+            const statusElement = document.getElementById('ticket-status');
+            statusElement.textContent = newStatus;
+
+            // Update kelas berdasarkan status baru
+            let statusClass = '';
+            switch (newStatus) {
+                case 'New Ticket':
+                    statusClass = 'status new';
+                    break;
+                case 'Assigned':
+                    statusClass = 'status assigned';
+                    break;
+                case 'In Progress':
+                    statusClass = 'status in-progress';
+                    break;
+                case 'Resolve':
+                    statusClass = 'status resolve';
+                    break;
+                case 'Confirmation':
+                    statusClass = 'status confirmation';
+                    break;
+                case 'On Hold':
+                    statusClass = 'status on-hold';
+                    break;
+            }
+
+            statusElement.className = statusClass;
+        }
+
+        function updateActionsForInProgress(ticketId) {
+            // Hapus dropdown dan tombol "Tugaskan Teknisi"
+            document.getElementById('technician-dropdown').style.display = 'none';
+            document.getElementById('assignTechnicianButton').style.display = 'none';
+
+            // Tambahkan tombol tindakan baru untuk "In Progress"
+            document.getElementById('actions').innerHTML = `
+                <button id="startMessagingButton">Mulai Pesan dengan Teknisi</button>
+                <button id="holdTicketButton">Tunda Tiket</button>
+                <button id="resolveTicketButton">Resolve</button>
+            `;
+
+            // Tambahkan event listener setelah elemen dibuat ulang
+            document.getElementById('startMessagingButton').onclick = function () {
+                startMessaging(ticketId, 'technician');
+            };
+            document.getElementById('holdTicketButton').onclick = function () {
+                holdTicket(ticketId);
+            };
+            document.getElementById('resolveTicketButton').onclick = function () {
+                resolveTicket(ticketId);
+            };
+        }
+
+        function updateActionsForOnHold(ticketId) {
+            // Hapus tombol lain dan tambahkan tombol "Mulai Pesan dengan Teknisi" dan "Buka Kembali"
+            document.getElementById('actions').innerHTML = `
+                <button id="startMessagingButton">Mulai Pesan dengan Teknisi</button>
+                <button id="reopenTicketButton">Buka Kembali</button>
+            `;
+
+            // Tambahkan event listener setelah elemen dibuat ulang
+            document.getElementById('startMessagingButton').onclick = function () {
+                startMessaging(ticketId, 'technician');
+            };
+            document.getElementById('reopenTicketButton').onclick = function () {
+                reopenTicket(ticketId);
+            };
+        }
+
+        function startMessaging(ticketId, recipient) {
+            if (recipient === 'technician') {
+                window.location.href = `Chat.html?recipient=technician&ticketId=${ticketId}`;
+            }
+        }
+
+        function holdTicket(ticketId) {
+            localStorage.setItem(`ticketStatus-${ticketId}`, 'On Hold');
+            alert('Tiket ' + ticketId + ' ditunda.');
+            updateStatus('On Hold');
+            updateActionsForOnHold(ticketId);
+        }
+
+        function reopenTicket(ticketId) {
+            localStorage.setItem(`ticketStatus-${ticketId}`, 'In Progress');
+            alert('Tiket ' + ticketId + ' dibuka kembali dan status diperbarui menjadi "In Progress".');
+            updateStatus('In Progress');
+            updateActionsForInProgress(ticketId);
+        }
+
+        function resolveTicket(ticketId) {
+            localStorage.setItem(`ticketStatus-${ticketId}`, 'Resolve');
+            alert('Tiket ' + ticketId + ' telah di-resolve.');
+            updateStatus('Resolve');
+            document.getElementById('actions').innerHTML = `<p>Tiket ini telah diselesaikan.</p>`;
+        }
+    </script>
+</body>
+
+</html>

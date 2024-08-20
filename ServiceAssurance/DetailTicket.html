@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Tiket</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* CSS yang sudah ada tetap sama */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+        }
+
+        .background-container {
+            background-image: url('navbar.svg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            padding-bottom: 20px;
+            height: 200px;
+        }
+
+        .navbar {
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            position: relative;
+            height: 35px;
+            /* Keep the height of the navbar */
+            overflow: visible;
+            /* Allow the logo to overflow */
+        }
+
+        .navbar-brand img {
+            left: -10px;
+            height: 200px;
+            /* Set the desired height of the logo */
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        .navbar-icons {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-icons i {
+            color: white;
+            margin-left: 30px;
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+
+        .sidebar {
+            width: 240px;
+            height: calc(100vh - 65px);
+            position: fixed;
+            top: 50px;
+            left: 0;
+            background-color: #fff;
+            border-right: 1px solid #ddd;
+            border-top-right-radius: 15px;
+            padding: 20px 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar .user-info {
+            text-align: center;
+        }
+
+        .sidebar .user-info img {
+            border-radius: 50%;
+            height: 80px;
+            width: 80px;
+            margin-bottom: 10px;
+        }
+
+        .sidebar .nav-link {
+            color: #333;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 5px 0;
+            text-decoration: none;
+        }
+
+        .sidebar .nav-link.active,
+        .sidebar .nav-link:hover {
+            background-color: #f8d7da;
+            color: #dc3545;
+        }
+
+        .main-content {
+            margin-left: 240px;
+            padding: 20px;
+            transition: margin-left 0.3s;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-modal {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 400px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            z-index: 1000;
+            display: none;
+            /* Awalnya disembunyikan */
+        }
+
+        .chat-header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header h5 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .chat-body {
+            padding: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .chat-message {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .chat-footer {
+            padding: 10px;
+            border-top: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-group {
+            display: flex;
+            width: 100%;
+        }
+
+        .attach-btn,
+        .send-btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+        .form-control {
+            border-radius: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            flex: 1;
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            color: #007bff;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .back-button i {
+            margin-right: 8px;
+        }
+
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .ticket-header .left-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .ticket-header .left-section img {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+        }
+
+        .ticket-header .right-section .status {
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #fff;
+            display: inline-block;
+        }
+
+        .ticket-body {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .ticket-body img {
+            max-width: 150px;
+            border-radius: 8px;
+            margin-right: 20px;
+        }
+
+        .ticket-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ticket-actions .buttons {
+            display: flex;
+            align-items: center;
+        }
+
+        .ticket-actions .buttons button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+            margin-right: 10px;
+        }
+
+        .ticket-actions .buttons button:hover {
+            background-color: #0056b3;
+        }
+
+        .ticket-actions .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .ticket-actions .dropdown select {
+            background-color: white;
+            color: black;
+            border: 1px solid #ccc;
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            margin-right: 10px;
+            width: 200px;
+        }
+
+        .ticket-actions .dropdown select:hover {
+            background-color: #f1f1f1;
+            border: 1px solid #aaa;
+        }
+
+        .ticket-actions .dropdown::after {
+            content: '\f078';
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        .ticket-actions .history {
+            color: #6c757d;
+        }
+
+        .status.new {
+            background: #007bff;
+        }
+
+        .status.assigned {
+            background: #17a2b8;
+        }
+
+        .status.in-progress {
+            background: #ffc107;
+        }
+
+        .status.resolve {
+            background: #28a745;
+        }
+
+        .status.confirmation {
+            background: #fd7e14;
+        }
+
+        .status.on-hold {
+            background: #6c757d;
+        }
+    </style>
+    <script src="TicketUser.js"></script>
+</head>
+
+<body>
+    <div class="background-container">
+        <nav class="navbar navbar-light">
+            <a class="navbar-brand" href="#">
+                <img src="Logo3.svg" alt="Service Desk Logo">
+            </a>
+            <div class="navbar-icons">
+                <i class="fas fa-bell"></i>
+                <i class="fas fa-user" id="userIcon"></i>
+            </div>
+        </nav>
+
+        <div class="sidebar">
+            <div class="user-info">
+                <img src="ServiceAssurance.jpg" alt="User Photo">
+                <div class="user-details">
+                    <span>Service Assurance</span>
+                </div>
+            </div>
+            <nav class="nav flex-column mt-4">
+                <a class="nav-link" href="BerandaService.html"><i class="fas fa-home"></i> Beranda</a>
+                <a class="nav-link active" href="ManajemenTicket.html"><i class="fas fa-tasks"></i> Manajemen Tiket</a>
+                <a class="nav-link" href="TiketSelesaiService.html"><i class="fas fa-check-circle"></i> Tiket
+                    Selesai</a>
+            </nav>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <div class="back-button" onclick="window.location.href='ManajemenTicket.html'">
+                <i class="fas fa-arrow-left"></i> Kembali
+            </div>
+            <div class="ticket-header">
+                <div class="left-section">
+                    <img src="ServiceAssurance.jpg" alt="User Image">
+                    <div>
+                        <h5 id="ticket-id"></h5>
+                        <p id="ticket-date"></p>
+                        <p id="ticket-category"></p>
+                    </div>
+                </div>
+                <div class="right-section">
+                    <div class="status" id="ticket-status"></div>
+                </div>
+            </div>
+            <div class="ticket-body">
+                <img id="ticket-image" alt="Screenshot">
+                <p id="ticket-description"></p>
+            </div>
+            <div class="ticket-actions">
+                <div id="actions" class="buttons">
+                    <div class="dropdown" id="technician-dropdown">
+                        <select id="technician">
+                            <option value="" disabled selected>Pilih Teknisi</option>
+                            <option value="tech1">Teknisi 1</option>
+                            <option value="tech2">Teknisi 2</option>
+                            <option value="tech3">Teknisi 3</option>
+                        </select>
+                    </div>
+                    <button id="assignTechnicianButton">Tugaskan Teknisi</button>
+                </div>
+                <div class="history" id="ticket-history"></div>
+            </div>
+        </div>
+    </div>
+    <div id="chatModal" class="chat-modal">
+        <div class="chat-header">
+            <h5>Chat dengan Teknisi</h5>
+            <button id="closeChat" class="close-btn">&times;</button>
+        </div>
+        <div class="chat-body">
+            <div id="chatMessage" class="chat-message"></div>
+        </div>
+        <div class="chat-footer">
+            <div class="input-group">
+                <button class="attach-btn"><i class="fas fa-plus"></i></button>
+                <input type="text" class="form-control" placeholder="Tulis pesan">
+                <button class="send-btn"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const params = new URLSearchParams(window.location.search);
+            const ticketId = params.get('id');
+            const ticket = tickets.find(t => t.id === ticketId);
+
+            if (ticket) {
+                document.getElementById('ticket-id').textContent = '#' + ticket.id;
+                document.getElementById('ticket-date').textContent = 'Dibuat pada ' + ticket.date;
+                document.getElementById('ticket-category').textContent = ticket.category;
+
+                const updatedStatus = localStorage.getItem(`ticketStatus-${ticketId}`);
+                if (updatedStatus) {
+                    ticket.status = updatedStatus;
+                }
+
+                updateStatus(ticket.status);
+
+                // Tetapkan tindakan awal berdasarkan status tiket
+                switch (ticket.status) {
+                    case 'New Ticket':
+                        statusClass = 'status new';
+                        break;
+                    case 'Assigned':
+                        statusClass = 'status assigned';
+                        break;
+                    case 'In Progress':
+                        statusClass = 'status in-progress';
+                        updateActionsForInProgress(ticketId); // Update UI jika status In Progress
+                        break;
+                    case 'Resolve':
+                    case 'Confirmation':
+                        statusClass = (ticket.status === 'Resolve') ? 'status resolve' : 'status confirmation';
+                        updateActionsForResolveOrConfirmation(ticketId); // Perbarui aksi untuk Resolve dan Confirmation
+                        break;
+                    case 'On Hold':
+                        statusClass = 'status on-hold';
+                        updateActionsForOnHold(ticketId); // Update UI jika status On Hold
+                        break;
+                }
+
+                document.getElementById('ticket-description').textContent = ticket.description;
+                document.getElementById('ticket-image').src = ticket.image;
+            }
+
+            document.getElementById('assignTechnicianButton').onclick = function () {
+                assignTechnician(ticketId);
+            };
+        });
+
+        function assignTechnician(ticketId) {
+            const technician = document.getElementById('technician').value;
+            if (technician) {
+                localStorage.setItem(`ticketTechnician-${ticketId}`, technician);
+                localStorage.setItem(`ticketStatus-${ticketId}`, 'In Progress');
+
+                // Perbarui array 'tickets' di localStorage
+                tickets = tickets.map(ticket => {
+                    if (ticket.id === ticketId) {
+                        ticket.status = 'In Progress';
+                    }
+                    return ticket;
+                });
+                localStorage.setItem('tickets', JSON.stringify(tickets));
+
+                alert(`Teknisi ${technician} telah ditugaskan untuk tiket ${ticketId} dan status diperbarui menjadi "In Progress".`);
+                updateStatus('In Progress');
+                updateActionsForInProgress(ticketId);
+            } else {
+                alert('Silakan pilih teknisi terlebih dahulu.');
+            }
+        }
+
+        function updateStatus(newStatus) {
+            const statusElement = document.getElementById('ticket-status');
+            statusElement.textContent = newStatus;
+
+            let statusClass = '';
+            switch (newStatus) {
+                case 'New Ticket':
+                    statusClass = 'status new';
+                    break;
+                case 'Assigned':
+                    statusClass = 'status assigned';
+                    break;
+                case 'In Progress':
+                    statusClass = 'status in-progress';
+                    break;
+                case 'Resolve':
+                    statusClass = 'status resolve';
+                    break;
+                case 'Confirmation':
+                    statusClass = 'status confirmation';
+                    break;
+                case 'On Hold':
+                    statusClass = 'status on-hold';
+                    break;
+                case 'Closed':
+                    statusClass = 'status closed';
+                    break;
+            }
+
+            statusElement.className = statusClass;
+        }
+
+        function updateActionsForInProgress(ticketId) {
+            const actionsContainer = document.getElementById('actions');
+
+            actionsContainer.innerHTML = ''; // Bersihkan semua konten sebelumnya
+
+            const startMessagingButton = document.createElement('button');
+            startMessagingButton.textContent = 'Mulai Pesan dengan Teknisi';
+            startMessagingButton.onclick = function () {
+                openChatModal(ticketId, 'technician');
+            };
+            actionsContainer.appendChild(startMessagingButton);
+
+            const holdTicketButton = document.createElement('button');
+            holdTicketButton.textContent = 'Tunda Tiket';
+            holdTicketButton.onclick = function () {
+                holdTicket(ticketId);
+            };
+            actionsContainer.appendChild(holdTicketButton);
+
+            const resolveTicketButton = document.createElement('button');
+            resolveTicketButton.textContent = 'Resolve';
+            resolveTicketButton.onclick = function () {
+                resolveTicket(ticketId);
+            };
+            actionsContainer.appendChild(resolveTicketButton);
+        }
+
+        function updateActionsForOnHold(ticketId) {
+            const actionsContainer = document.getElementById('actions');
+
+            actionsContainer.innerHTML = ''; // Bersihkan semua konten sebelumnya
+
+            const startMessagingButton = document.createElement('button');
+            startMessagingButton.textContent = 'Mulai Pesan dengan Teknisi';
+            startMessagingButton.onclick = function () {
+                openChatModal(ticketId, 'technician');
+            };
+            actionsContainer.appendChild(startMessagingButton);
+
+            const reopenTicketButton = document.createElement('button');
+            reopenTicketButton.textContent = 'Buka Kembali';
+            reopenTicketButton.onclick = function () {
+                reopenTicket(ticketId);
+            };
+            actionsContainer.appendChild(reopenTicketButton);
+        }
+
+        function openChatModal(ticketId, recipient) {
+            const ticket = tickets.find(t => t.id === ticketId); // Temukan data tiket berdasarkan ticketId
+
+            if (ticket) {
+                const chatMessage = document.getElementById('chatMessage');
+                let messageContent = '';
+
+                if (recipient === 'technician') {
+                    messageContent = `
+                        ${ticket.user} - ${ticket.title}<br>
+                        ${ticket.description}
+                        <br><br><strong>Instruksi:</strong> Silakan selesaikan masalah yang dilaporkan.
+                    `;
+                    document.querySelector('.chat-header h5').textContent = 'Chat dengan Teknisi';
+                } else if (recipient === 'user') {
+                    messageContent = `
+                        ${ticket.user} - ${ticket.title}<br>
+                        ${ticket.description}
+                        <br><br><strong>Status:</strong> Masalah telah diatasi. Silakan konfirmasi.
+                    `;
+                    document.querySelector('.chat-header h5').textContent = 'Chat dengan Pengguna';
+
+                    // Ubah status tiket menjadi "Confirmation"
+                    localStorage.setItem(`ticketStatus-${ticketId}`, 'Confirmation');
+
+                    // Perbarui array 'tickets' di localStorage
+                    tickets = tickets.map(ticket => {
+                        if (ticket.id === ticketId) {
+                            ticket.status = 'Confirmation';
+                        }
+                        return ticket;
+                    });
+                    localStorage.setItem('tickets', JSON.stringify(tickets));
+
+                    updateStatus('Confirmation');
+                }
+
+                chatMessage.innerHTML = messageContent;
+
+                const chatModal = document.getElementById('chatModal');
+                chatModal.style.display = 'block';
+            }
+        }
+
+        document.getElementById('closeChat').onclick = function () {
+            const chatModal = document.getElementById('chatModal');
+            chatModal.style.display = 'none';
+        };
+
+        function holdTicket(ticketId) {
+            localStorage.setItem(`ticketStatus-${ticketId}`, 'On Hold');
+
+            // Perbarui array 'tickets' di localStorage
+            tickets = tickets.map(ticket => {
+                if (ticket.id === ticketId) {
+                    ticket.status = 'On Hold';
+                }
+                return ticket;
+            });
+            localStorage.setItem('tickets', JSON.stringify(tickets));
+
+            alert('Tiket ' + ticketId + ' ditunda.');
+            updateStatus('On Hold');
+            updateActionsForOnHold(ticketId);
+        }
+
+        function reopenTicket(ticketId) {
+            localStorage.setItem(`ticketStatus-${ticketId}`, 'In Progress');
+
+            // Perbarui array 'tickets' di localStorage
+            tickets = tickets.map(ticket => {
+                if (ticket.id === ticketId) {
+                    ticket.status = 'In Progress';
+                }
+                return ticket;
+            });
+            localStorage.setItem('tickets', JSON.stringify(tickets));
+
+            alert('Tiket ' + ticketId + ' dibuka kembali dan status diperbarui menjadi "In Progress".');
+
+            updateStatus('In Progress');
+            updateActionsForInProgress(ticketId);
+        }
+
+        function resolveTicket(ticketId) {
+            console.log('resolveTicket dipanggil untuk tiket ' + ticketId); // Debugging
+            localStorage.setItem(`ticketStatus-${ticketId}`, 'Resolve');
+
+            // Perbarui array 'tickets' di localStorage
+            tickets = tickets.map(ticket => {
+                if (ticket.id === ticketId) {
+                    ticket.status = 'Resolve';
+                }
+                return ticket;
+            });
+            localStorage.setItem('tickets', JSON.stringify(tickets));
+
+            alert('Tiket ' + ticketId + ' telah di-resolve.');
+
+            // Perbarui status di UI
+            updateStatus('Resolve');
+
+            // Perbarui aksi yang tersedia setelah tiket di-resolve
+            updateActionsForResolveOrConfirmation(ticketId);
+        }
+
+        function updateActionsForResolveOrConfirmation(ticketId) {
+            const actionsContainer = document.getElementById('actions');
+            actionsContainer.innerHTML = ''; // Bersihkan semua konten sebelumnya
+
+            const startMessagingTechnicianButton = document.createElement('button');
+            startMessagingTechnicianButton.textContent = 'Mulai Pesan dengan Teknisi';
+            startMessagingTechnicianButton.onclick = function () {
+                openChatModal(ticketId, 'technician');
+            };
+            actionsContainer.appendChild(startMessagingTechnicianButton);
+
+            const startMessagingUserButton = document.createElement('button');
+            startMessagingUserButton.textContent = 'Mulai Pesan dengan Pengguna';
+            startMessagingUserButton.onclick = function () {
+                openChatModal(ticketId, 'user');
+            };
+            actionsContainer.appendChild(startMessagingUserButton);
+
+            const closeTicketButton = document.createElement('button');
+            closeTicketButton.textContent = 'Close';
+            closeTicketButton.style.backgroundColor = '#dc3545'; // Warna merah untuk tombol Close
+            closeTicketButton.onclick = function () {
+                closeTicket(ticketId);
+            };
+            actionsContainer.appendChild(closeTicketButton);
+        }
+
+        function closeTicket(ticketId) {
+            console.log('closeTicket dipanggil untuk tiket ' + ticketId); // Debugging
+            localStorage.setItem(`ticketStatus-${ticketId}`, 'Closed');
+
+            // Simpan tiket yang telah di-close ke localStorage untuk halaman Tiket Selesai
+            let completedTickets = JSON.parse(localStorage.getItem('completedTickets')) || [];
+            const ticket = tickets.find(t => t.id === ticketId);
+            if (ticket) {
+                completedTickets.push(ticket);
+                localStorage.setItem('completedTickets', JSON.stringify(completedTickets));
+            }
+
+            // Perbarui array 'tickets' di localStorage
+            tickets = tickets.filter(ticket => ticket.id !== ticketId);
+            localStorage.setItem('tickets', JSON.stringify(tickets));
+
+            alert('Tiket ' + ticketId + ' telah di-closed.');
+
+            // Redirect ke halaman manajemen tiket setelah tiket ditutup
+            window.location.href = 'ManajemenTicket.html';
+        }
+    </script>
+</body>
+
+</html>

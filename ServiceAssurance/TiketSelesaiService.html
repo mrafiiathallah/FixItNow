@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiket Selesai</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+        }
+
+        .background-container {
+            background-image: url('Navbar.svg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            padding-bottom: 20px;
+            height: 200px;
+        }
+
+        .navbar {
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            position: relative;
+            height: 35px;
+            /* Keep the height of the navbar */
+            overflow: visible;
+            /* Allow the logo to overflow */
+        }
+
+        .navbar-brand img {
+            left: -10px;
+            height: 200px;
+            /* Set the desired height of the logo */
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        .navbar-icons {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-icons i {
+            color: white;
+            margin-left: 30px;
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 40px;
+            background-color: #fff;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 5px;
+            padding: 10px;
+            width: 150px;
+        }
+
+        .user-dropdown button {
+            color: black;
+            padding: 8px 12px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            border: none;
+            background: none;
+            width: 100%;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .user-dropdown button:hover {
+            background-color: #f1f1f1;
+        }
+
+        .user-dropdown button i {
+            margin-left: auto;
+            font-size: 1.25rem;
+            color: #6c757d;
+        }
+
+        .sidebar {
+            width: 240px;
+            height: calc(100vh - 65px);
+            position: fixed;
+            top: 50px;
+            left: 0;
+            background-color: #fff;
+            border-right: 1px solid #ddd;
+            border-top-right-radius: 15px;
+            padding: 20px 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar .user-info {
+            text-align: center;
+        }
+
+        .sidebar .user-info img {
+            border-radius: 50%;
+            height: 80px;
+            width: 80px;
+            margin-bottom: 10px;
+        }
+
+        .sidebar .user-info .user-details {
+            font-size: 14px;
+        }
+
+        .sidebar .user-info .user-details span {
+            display: block;
+        }
+
+        .sidebar .nav-link {
+            color: #333;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 5px 0;
+            text-decoration: none;
+        }
+
+        .sidebar .nav-link.active,
+        .sidebar .nav-link:hover {
+            background-color: #f8d7da;
+            color: #dc3545;
+        }
+
+        .main-content {
+            margin-left: 240px;
+            padding: 20px;
+            transition: margin-left 0.3s;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #fff;
+            height: 63px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .header .right-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .header .user-info {
+            display: flex;
+            align-items: center;
+            margin-left: 15px;
+        }
+
+        .header .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .content {
+            margin-top: 50px;
+        }
+
+        .dashboard-title {
+            color: #ddd;
+            font-size: 18px;
+            font-weight: normal;
+            margin-top: 20px;
+        }
+
+        .dashboard-cards {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+
+
+        .table-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: -50px;
+        }
+
+        .search-filter {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .search-filter input[type="text"] {
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .add-ticket-button {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .add-ticket-button button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .add-ticket-button button:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        table th,
+        table td {
+            padding: 10px 15px;
+            text-align: left;
+        }
+
+        table th {
+            background: #d9534f;
+            color: white;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+
+        table tr {
+            border-bottom: 1px solid #eee;
+        }
+
+        table tr:last-child {
+            border-bottom: none;
+        }
+
+        table td {
+            font-size: 14px;
+            color: #333;
+        }
+
+        table tr:hover {
+            background: #f1f1f1;
+        }
+
+        .status {
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #fff;
+            display: inline-block;
+        }
+
+        .status.open {
+            background: #ffcc00;
+            color: #000;
+        }
+
+        .status.closed {
+            background: #4caf50;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="background-container">
+        <nav class="navbar navbar-light">
+            <a class="navbar-brand" href="#">
+                <img src="Logo3.svg" alt="Service Desk Logo">
+            </a>
+            <div class="navbar-icons">
+                <i class="fas fa-bell"></i>
+                <i class="fas fa-user" id="userIcon"></i>
+                <div id="userDropdown" class="user-dropdown">
+                    <button type="button" onclick="showModal()">Log Out <i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="sidebar">
+            <div class="user-info">
+                <img src="ServiceAssurance.jpg" alt="User Photo">
+                <div class="user-details">
+                    <span>Service Assurance</span>
+                </div>
+            </div>
+            <nav class="nav flex-column mt-4">
+                <a class="nav-link" href="BerandaService.html"><i class="fas fa-home"></i> Beranda</a>
+                <!-- <a class="nav-link" href="TiketBaru.html"><i class="fas fa-ticket-alt"></i> Tiket Baru</a> -->
+                <a class="nav-link" href="ManajemenTicket.html"><i class="fas fa-tasks"></i> Manajemen Tiket</a>
+                <a class="nav-link active" href="#"><i class="fas fa-check-circle"></i> Tiket Selesai</a>
+            </nav>
+        </div>
+
+        <div class="main-content">
+            <div class="dashboard-title">Tiket Selesai</div>
+            <div class="content">
+                <div class="table-container">
+                    <div class="search-filter">
+                        <input type="text" placeholder="Search...">
+                    </div>
+                    <table id="tiketTable">
+                        <thead>
+                            <tr>
+                                <th>ID Tiket</th>
+                                <th>Pengguna</th>
+                                <th>Judul</th>
+                                <th>Kategori</th>
+                                <th>Tanggal Pengajuan</th>
+                                <th>Tanggal Selesai</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr id="noDataRow">
+                                <td colspan="7" style="text-align: center;">No Data Found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <i class="fas fa-sign-out-alt fa-3x text-danger mb-3"></i>
+                    <p>Are you sure you want to log out?</p>
+                    <button type="button" class="btn btn-danger" onclick="logout()">Log Out</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="TicketUser.js"></script>
+    <script>
+        function logout() {
+            window.location.href = "Login.html";
+        }
+
+        document.getElementById('userIcon').addEventListener('click', function () {
+            var dropdown = document.getElementById('userDropdown');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        });
+
+        function showModal() {
+            var myModal = new bootstrap.Modal(document.getElementById('userModal'), {
+                keyboard: false
+            });
+            myModal.show();
+            document.getElementById('userDropdown').style.display = 'none';
+        }
+
+        // Optional: Close the dropdown if clicked outside
+        window.onclick = function (event) {
+            if (!event.target.matches('.fas.fa-user')) {
+                var dropdowns = document.getElementsByClassName("user-dropdown");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.style.display === 'block') {
+                        openDropdown.style.display = 'none';
+                    }
+                }
+            }
+        };
+
+        function formatDate(date) {
+            const options = {
+                weekday: 'long', // "long" untuk nama hari lengkap
+                year: 'numeric',
+                month: 'long', // "long" untuk nama bulan lengkap
+                day: 'numeric'
+            };
+            return new Date(date).toLocaleDateString('id-ID', options); // Gunakan 'id-ID' untuk format bahasa Indonesia
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const tableBody = document.querySelector('#tiketTable tbody');
+
+            function renderCompletedTickets() {
+                const completedTickets = JSON.parse(localStorage.getItem('completedTickets')) || [];
+
+                tableBody.innerHTML = ''; // Kosongkan isi tabel sebelum menambahkan data baru
+
+                if (completedTickets.length === 0) {
+                    // Tampilkan pesan "No Data Found" jika tidak ada tiket yang berstatus "Closed"
+                    const row = document.createElement('tr');
+                    row.innerHTML = '<td colspan="7" style="text-align:center;">No Data Found</td>';
+                    tableBody.appendChild(row);
+                } else {
+                    // Render setiap tiket yang telah selesai (closed)
+                    completedTickets.forEach(ticket => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                        <td>#${ticket.id}</td>
+                        <td>${ticket.user}</td>
+                        <td>${ticket.title}</td>
+                        <td>${ticket.category}</td>
+                        <td>${ticket.date}</td>
+                        <td>${formatDate(new Date())}</td>
+                        <td><span class="status closed">Closed</span></td>
+                        <td>
+                            <i class="fas fa-eye icon" onclick="location.href='DetailTicketSelesai.html?id=${ticket.id}'"></i>
+                        </td>
+                    `;
+                        tableBody.appendChild(row);
+                    });
+                }
+            }
+
+            renderCompletedTickets();
+        });
+    </script>
+</body>
+
+</html>

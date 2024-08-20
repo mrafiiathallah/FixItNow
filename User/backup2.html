@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beranda</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .sidebar.collapsed {
+            width: 70px;
+        }
+
+        .sidebar.collapsed .user-info img {
+            height: 50px;
+            width: 50px;
+        }
+
+        .sidebar.collapsed .user-info .user-details,
+        .sidebar.collapsed .nav-link span {
+            opacity: 0;
+            height: 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .ml-collapsed {
+            margin-left: 70px !important;
+        }
+    </style>
+</head>
+
+<body class="font-sans bg-gray-100">
+    <div class="bg-cover bg-center h-52" style="background-image: url('navbar.jpg');">
+        <nav class="bg-gray-800 bg-opacity-80 border-b border-gray-300 p-4 flex justify-between items-center">
+            <a class="flex items-center space-x-2" href="#">
+                <img src="logo.png" alt="Service Desk Logo" class="h-8 cursor-pointer">
+                <i class="fas fa-bars text-white text-lg cursor-pointer" onclick="toggleSidebar()"></i>
+            </a>
+            <div class="flex items-center space-x-6 text-white">
+                <i class="fas fa-bell text-xl cursor-pointer"></i>
+                <div class="relative">
+                    <i class="fas fa-user text-xl cursor-pointer" id="userIcon"></i>
+                    <div id="userDropdown" class="hidden absolute right-0 mt-2 bg-white shadow-lg rounded p-2">
+                        <button class="w-full flex items-center space-x-2 text-black p-2 hover:bg-gray-200" onclick="showModal()">
+                            <span>Log Out</span>
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <div class="flex">
+        <div class="sidebar w-64 h-[calc(100vh-65px)] fixed top-16 left-0 bg-white border-r border-gray-300 rounded-tr-lg p-4 shadow transition-all duration-300" id="sidebar">
+            <div class="user-info text-center transition-all duration-300">
+                <img src="user.jpg" alt="User Photo" class="rounded-full h-20 w-20 mx-auto mb-2 transition-all duration-300">
+                <div class="user-details text-sm font-semibold">Akmal Sidki Razaka</div>
+            </div>
+            <nav class="mt-4">
+                <a class="nav-link flex items-center space-x-3 p-3 text-gray-700 rounded hover:bg-red-100 hover:text-red-600 transition-all duration-300 {{ request()->is('/') ? 'bg-red-100 text-red-600' : '' }}" href="/">
+                    <i class="fas fa-home"></i>
+                    <span>Beranda</span>
+                </a>
+                <a class="nav-link flex items-center space-x-3 p-3 text-gray-700 rounded hover:bg-red-100 hover:text-red-600 transition-all duration-300 {{ request()->is('TiketBaru') ? 'bg-red-100 text-red-600' : '' }}" href="/TiketBaru">
+                    <i class="fas fa-ticket-alt"></i>
+                    <span>Tiket Baru</span>
+                </a>
+                <a class="nav-link flex items-center space-x-3 p-3 text-gray-700 rounded hover:bg-red-100 hover:text-red-600 transition-all duration-300 {{ request()->is('TiketSaya') ? 'bg-red-100 text-red-600' : '' }}" href="/TiketSaya">
+                    <i class="fas fa-tasks"></i>
+                    <span>Tiket Saya</span>
+                </a>
+                <a class="nav-link flex items-center space-x-3 p-3 text-gray-700 rounded hover:bg-red-100 hover:text-red-600 transition-all duration-300 {{ request()->is('TiketSelesai') ? 'bg-red-100 text-red-600' : '' }}" href="/TiketSelesai">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Tiket Selesai</span>
+                </a>
+            </nav>
+        </div>
+
+        <div class="flex-1 p-6 ml-64 transition-all duration-300" id="main-content">
+            <div class="text-2xl font-bold mb-6">Beranda</div>
+            <div class="flex space-x-4 mb-10">
+                <div class="flex-1 bg-white p-6 rounded shadow hover:shadow-lg transition-transform transform hover:-translate-y-2">
+                    <i class="fas fa-ticket-alt text-red-500 text-2xl mb-2"></i>
+                    <div class="text-2xl font-bold">3</div>
+                    <div class="text-gray-600">Tiket Saya</div>
+                </div>
+                <div class="flex-1 bg-white p-6 rounded shadow hover:shadow-lg transition-transform transform hover:-translate-y-2">
+                    <i class="fas fa-check-circle text-red-500 text-2xl mb-2"></i>
+                    <div class="text-2xl font-bold">10</div>
+                    <div class="text-gray-600">Tiket Selesai</div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded shadow">
+                <div class="flex justify-end mb-4">
+                    <button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition" onclick="redirectToTiketBaru()">Buat Tiket Baru</button>
+                </div>
+                <div class="flex justify-end mb-4">
+                    <input type="text" placeholder="Search..." class="p-2 border border-gray-300 rounded">
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+                        <thead>
+                            <tr>
+                                <th class="bg-red-500 text-white p-3 text-left text-xs font-semibold uppercase tracking-wide">ID Tiket</th>
+                                <th class="bg-red-500 text-white p-3 text-left text-xs font-semibold uppercase tracking-wide">Judul</th>
+                                <th class="bg-red-500 text-white p-3 text-left text-xs font-semibold uppercase tracking-wide">Kategori</th>
+                                <th class="bg-red-500 text-white p-3 text-left text-xs font-semibold uppercase tracking-wide">Status</th>
+                                <th class="bg-red-500 text-white p-3 text-left text-xs font-semibold uppercase tracking-wide">Tanggal Pengajuan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-gray-200 hover:bg-gray-100 transition">
+                                <td class="p-3 text-gray-700">#12345</td>
+                                <td class="p-3 text-gray-700">Masalah Login</td>
+                                <td class="p-3 text-gray-700">Login</td>
+                                <td class="p-3">
+                                    <span class="inline-block px-3 py-1 text-xs font-semibold bg-yellow-300 text-yellow-800 rounded-full">Diproses</span>
+                                </td>
+                                <td class="p-3 text-gray-700">2023-10-01</td>
+                            </tr>
+                            <!-- Tambahkan baris lainnya sesuai kebutuhan -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="userModal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
+        <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+            <i class="fas fa-sign-out-alt fa-3x text-red-500 mb-3"></i>
+            <p>Are you sure you want to log out?</p>
+            <div class="mt-4">
+                <button class="bg-red-500 text-white px-4 py-2 rounded mr-2" onclick="logout()">Log Out</button>
+                <button class="bg-gray-300 text-gray-700 px-4 py-2 rounded" onclick="hideModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function redirectToTiketBaru() {
+            window.location.href = "TiketBaru.html";
+        }
+
+        function logout() {
+            window.location.href = "Login.html";
+        }
+
+        document.getElementById('userIcon').addEventListener('click', function () {
+            var dropdown = document.getElementById('userDropdown');
+            dropdown.classList.toggle('hidden');
+        });
+
+        function showModal() {
+            document.getElementById('userModal').classList.remove('hidden');
+            document.getElementById('userDropdown').classList.add('hidden');
+        }
+
+        function hideModal() {
+            document.getElementById('userModal').classList.add('hidden');
+        }
+
+        function toggleSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            var mainContent = document.getElementById('main-content');
+            sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('ml-collapsed');
+        }
+
+        window.onclick = function (event) {
+            if (!event.target.matches('#userIcon')) {
+                var dropdowns = document.getElementsByClassName("user-dropdown");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (!openDropdown.classList.contains('hidden')) {
+                        openDropdown.classList.add('hidden');
+                    }
+                }
+            }
+        };
+    </script>
+</body>
+
+</html>

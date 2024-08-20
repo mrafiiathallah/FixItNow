@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Tiket</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+        }
+
+        .background-container {
+            background-image: url('navbar.svg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            padding-bottom: 20px;
+            height: 200px;
+        }
+
+        .navbar {
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            position: relative;
+            height: 35px;
+            overflow: visible;
+        }
+
+        .navbar-brand img {
+            left: -10px;
+            height: 200px;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        .navbar-icons {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-icons i {
+            color: white;
+            margin-left: 30px;
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 40px;
+            background-color: #fff;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 5px;
+            padding: 10px;
+            width: 150px;
+        }
+
+        .user-dropdown button {
+            color: black;
+            padding: 8px 12px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            border: none;
+            background: none;
+            width: 100%;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .user-dropdown button:hover {
+            background-color: #f1f1f1;
+        }
+
+        .user-dropdown button i {
+            margin-left: auto;
+            font-size: 1.25rem;
+            color: #6c757d;
+        }
+
+        .sidebar {
+            width: 240px;
+            height: calc(100vh - 65px);
+            position: fixed;
+            top: 50px;
+            left: 0;
+            background-color: #fff;
+            border-right: 1px solid #ddd;
+            border-top-right-radius: 15px;
+            padding: 20px 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar .user-info {
+            text-align: center;
+        }
+
+        .sidebar .user-info img {
+            border-radius: 50%;
+            height: 80px;
+            width: 80px;
+            margin-bottom: 10px;
+        }
+
+        .sidebar .user-info .user-details {
+            font-size: 14px;
+        }
+
+        .sidebar .user-info .user-details span {
+            display: block;
+        }
+
+        .sidebar .nav-link {
+            color: #333;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 5px 0;
+            text-decoration: none;
+        }
+
+        .sidebar .nav-link.active,
+        .sidebar .nav-link:hover {
+            background-color: #f8d7da;
+            color: #dc3545;
+        }
+
+        .main-content {
+            margin-left: 240px;
+            padding: 20px;
+        }
+
+        .content {
+            margin-top: 50px;
+        }
+
+        .dashboard-title {
+            color: #ddd;
+            font-size: 18px;
+            font-weight: normal;
+            margin-top: 20px;
+        }
+
+        .table-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: -50px;
+        }
+
+        .filter-container {
+            margin-bottom: 20px;
+        }
+
+        .filter-container .form-control {
+            width: 70%;
+            margin-bottom: 10px;
+        }
+
+        .search-filter {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+            float: right;
+        }
+
+        .search-filter input[type="text"] {
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        table th,
+        table td {
+            padding: 10px 15px;
+            text-align: left;
+        }
+
+        table th {
+            background: #d9534f;
+            color: white;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+
+        table tr {
+            border-bottom: 1px solid #eee;
+        }
+
+        table tr:last-child {
+            border-bottom: none;
+        }
+
+        table td {
+            font-size: 14px;
+            color: #333;
+        }
+
+        table tr:hover {
+            background: #f1f1f1;
+        }
+
+        .icon {
+            font-size: 1.2em;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .icon-delete {
+            color: red;
+        }
+
+        /* CSS untuk Status */
+        .status {
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #fff;
+            display: inline-block;
+        }
+
+        .status.new {
+            background: #007bff;
+        }
+
+        .status.assigned {
+            background: #17a2b8;
+        }
+
+        .status.in-progress {
+            background: #ffc107;
+        }
+
+        .status.resolve {
+            background: #28a745;
+        }
+
+        .status.confirmation {
+            background: #fd7e14;
+        }
+
+        .status.on-hold {
+            background: #6c757d;
+        }
+    </style>
+    <script src="TicketUser.js"></script>
+</head>
+
+<body>
+    <div class="background-container">
+        <nav class="navbar navbar-light">
+            <a class="navbar-brand" href="#">
+                <img src="Logo3.svg" alt="Service Desk Logo">
+            </a>
+            <div class="navbar-icons">
+                <i class="fas fa-bell"></i>
+                <i class="fas fa-user" id="userIcon"></i>
+                <div id="userDropdown" class="user-dropdown">
+                    <button type="button" onclick="showModal()">Log Out <i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="sidebar">
+            <div class="user-info">
+                <img src="ServiceAssurance.jpg" alt="User Photo">
+                <div class="user-details">
+                    <span>Service Assurance</span>
+                </div>
+            </div>
+            <nav class="nav flex-column mt-4">
+                <a class="nav-link" href="BerandaService.html"><i class="fas fa-home"></i> Beranda</a>
+                <a class="nav-link active" href="#"><i class="fas fa-tasks"></i> Manajemen Tiket</a>
+                <a class="nav-link" href="TiketSelesaiService.html"><i class="fas fa-check-circle"></i> Tiket
+                    Selesai</a>
+            </nav>
+        </div>
+
+        <div class="main-content">
+            <div class="dashboard-title">Manajemen Tiket</div>
+            <div class="content">
+                <div class="table-container">
+                    <div class="filter-container">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <select id="statusFilter" class="form-control">
+                                    <option value="">Semua Status</option>
+                                    <option value="New Ticket">New Ticket</option>
+                                    <option value="Assigned">Assigned</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Resolve">Resolve</option>
+                                    <option value="Confirmation">Confirmation</option>
+                                    <option value="On Hold">On Hold</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="search-filter">
+                        <input type="text" id="searchBar" class="form-control" placeholder="Search...">
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID Tiket</th>
+                                <th>Pengguna</th>
+                                <th>Judul</th>
+                                <th>Kategori</th>
+                                <th>Status</th>
+                                <th>Tanggal Dibuat</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Data tiket akan diisi di sini -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <i class="fas fa-sign-out-alt fa-3x text-danger mb-3"></i>
+                    <p>Are you sure you want to log out?</p>
+                    <button type="button" class="btn btn-danger" onclick="logout()">Log Out</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function logout() {
+            window.location.href = "Login.html";
+        }
+
+        document.getElementById('userIcon').addEventListener('click', function () {
+            var dropdown = document.getElementById('userDropdown');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        });
+
+        function showModal() {
+            var myModal = new bootstrap.Modal(document.getElementById('userModal'), {
+                keyboard: false
+            });
+            myModal.show();
+            document.getElementById('userDropdown').style.display = 'none';
+        }
+
+        // Optional: Close the dropdown if clicked outside
+        window.onclick = function (event) {
+            if (!event.target.matches('.fas.fa-user')) {
+                var dropdowns = document.getElementsByClassName("user-dropdown");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.style.display === 'block') {
+                        openDropdown.style.display = 'none';
+                    }
+                }
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const tableBody = document.querySelector('table tbody');
+            const statusFilter = document.getElementById('statusFilter');
+            const searchBar = document.getElementById('searchBar');
+
+            function renderTable(tickets) {
+                const tableBody = document.querySelector('table tbody');
+                tableBody.innerHTML = ''; // Kosongkan isi tabel sebelum menambahkan data baru
+
+                tickets.forEach(ticket => {
+                    const updatedStatus = localStorage.getItem(`ticketStatus-${ticket.id}`);
+                    if (updatedStatus) {
+                        ticket.status = updatedStatus;
+                    }
+
+                    // Skip ticket if it is closed
+                    if (ticket.status === 'Closed') {
+                        return;
+                    }
+
+                    // Tentukan kelas status berdasarkan status tiket
+                    let statusClass = '';
+                    switch (ticket.status) {
+                        case 'New Ticket':
+                            statusClass = 'status new';
+                            break;
+                        case 'Assigned':
+                            statusClass = 'status assigned';
+                            break;
+                        case 'In Progress':
+                            statusClass = 'status in-progress';
+                            break;
+                        case 'Resolve':
+                            statusClass = 'status resolve';
+                            break;
+                        case 'Confirmation':
+                            statusClass = 'status confirmation';
+                            break;
+                        case 'On Hold':
+                            statusClass = 'status on-hold';
+                            break;
+                    }
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>#${ticket.id}</td>
+                        <td>${ticket.user}</td>
+                        <td>${ticket.title}</td>
+                        <td>${ticket.category}</td>
+                        <td><span class="${statusClass}">${ticket.status}</span></td>
+                        <td>${ticket.date}</td>
+                        <td>
+                            ${ticket.status !== 'New Ticket' ?
+                            `<i class="fas fa-eye icon" onclick="location.href='DetailTicket.html?id=${ticket.id}'"></i>` : ''
+                        }
+                            ${ticket.status === 'New Ticket' ?
+                            `<i class="fas fa-check icon" onclick="confirmTicket('${ticket.id}')"></i>` : ''
+                        }
+                            <i class="fas fa-trash-alt icon icon-delete" onclick="deleteTicket('${ticket.id}')"></i>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+
+            function filterAndSearchTickets() {
+                const searchTerm = searchBar.value.toLowerCase();
+                const filteredTickets = tickets.filter(ticket => {
+                    const statusMatch = !statusFilter.value || ticket.status === statusFilter.value;
+                    const searchMatch = ticket.title.toLowerCase().includes(searchTerm) || ticket.user.toLowerCase().includes(searchTerm);
+                    return statusMatch && searchMatch;
+                });
+
+                renderTable(filteredTickets);
+            }
+
+            statusFilter.addEventListener('change', filterAndSearchTickets);
+            searchBar.addEventListener('input', filterAndSearchTickets);
+
+            renderTable(tickets);
+        });
+
+        function confirmTicket(ticketId) {
+            updateTicketStatus(ticketId, 'Assigned');
+            localStorage.setItem(`ticketStatus-${ticketId}`, 'Assigned');
+            window.location.reload(); // Reload halaman untuk memperbarui status dan aksi
+        }
+    </script>
+
+
+</body>
+
+</html>

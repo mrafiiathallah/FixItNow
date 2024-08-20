@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Tiket Selesai</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .background-container {
+            background-image: url('Navbar.svg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            padding-bottom: 20px;
+            height: 200px;
+        }
+
+        .navbar {
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            position: relative;
+            height: 35px; /* Keep the height of the navbar */
+            overflow: visible; /* Allow the logo to overflow */
+        }
+
+        .navbar-brand img {
+            left: -10px;
+            height: 200px; /* Set the desired height of the logo */
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        .navbar-icons {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-icons i {
+            color: white;
+            margin-left: 30px;
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 40px;
+            background-color: #fff;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 5px;
+            padding: 10px;
+            width: 150px;
+        }
+
+        .user-dropdown button {
+            color: black;
+            padding: 8px 12px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            border: none;
+            background: none;
+            width: 100%;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .user-dropdown button:hover {
+            background-color: #f1f1f1;
+        }
+
+        .user-dropdown button i {
+            margin-left: auto;
+            font-size: 1.25rem;
+            color: #6c757d;
+        }
+
+        .sidebar {
+            width: 240px;
+            height: calc(100vh - 65px);
+            position: fixed;
+            top: 50px;
+            left: 0;
+            background-color: #fff;
+            border-right: 1px solid #ddd;
+            border-top-right-radius: 15px;
+            padding: 20px 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar .user-info {
+            text-align: center;
+        }
+
+        .sidebar .user-info img {
+            border-radius: 50%;
+            height: 80px;
+            width: 80px;
+            margin-bottom: 10px;
+        }
+
+        .sidebar .user-info .user-details {
+            font-size: 14px;
+        }
+
+        .sidebar .user-info .user-details span {
+            display: block;
+        }
+
+        .sidebar .nav-link {
+            color: #333;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 5px 0;
+            text-decoration: none;
+        }
+
+        .sidebar .nav-link.active,
+        .sidebar .nav-link:hover {
+            background-color: #f8d7da;
+            color: #dc3545;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            color: #007bff;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .back-button i {
+            margin-right: 8px;
+        }
+
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .ticket-header .left-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .ticket-header .left-section img {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+        }
+
+        .ticket-header .right-section .status {
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #fff;
+            display: inline-block;
+        }
+
+        .ticket-body {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .ticket-body img {
+            max-width: 150px;
+            border-radius: 8px;
+            margin-right: 20px;
+        }
+
+        .ticket-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ticket-actions .buttons {
+            display: flex;
+            align-items: center;
+        }
+
+        .ticket-actions .buttons button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+            margin-right: 10px;
+        }
+
+        .ticket-actions .buttons button:hover {
+            background-color: #0056b3;
+        }
+
+        .ticket-actions .history {
+            color: #6c757d;
+        }
+
+        .status.new {
+            background: #007bff;
+        }
+
+        .status.assigned {
+            background: #17a2b8;
+        }
+
+        .status.in-progress {
+            background: #ffc107;
+        }
+
+        .status.resolve {
+            background: #28a745;
+        }
+
+        .status.confirmation {
+            background: #fd7e14;
+        }
+
+        .status.on-hold {
+            background: #6c757d;
+        }
+
+        .chat-box {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .chat-message {
+            margin-bottom: 10px;
+        }
+
+        .chat-message.user {
+            text-align: right;
+        }
+
+        .chat-message .message-content {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 20px;
+            background: #007bff;
+            color: white;
+            max-width: 80%;
+        }
+
+        .chat-message.user .message-content {
+            background: #17a2b8;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .rating-stars {
+            display: flex;
+            margin-right: 10px;
+        }
+
+        .rating-stars i {
+            color: #ffc107;
+            font-size: 24px;
+            cursor: pointer;
+            margin-right: 5px;
+            margin-top: 10px;
+        }
+
+        .rating-comment {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="background-container">
+        <nav class="navbar navbar-light">
+            <a class="navbar-brand" href="#">
+                <img src="Logo3.svg" alt="Service Desk Logo">
+            </a>
+            <div class="navbar-icons">
+                <i class="fas fa-bell"></i>
+                <i class="fas fa-user" id="userIcon"></i>
+                <div id="userDropdown" class="user-dropdown">
+                    <button type="button" onclick="showModal()">Log Out <i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="sidebar">
+            <div class="user-info">
+                <img src="user.jpg" alt="User Photo">
+                <div class="user-details">
+                    <span>Akmal Sidki Razaka</span>
+                </div>
+            </div>
+            <nav class="nav flex-column mt-4">
+                <a class="nav-link" href="Beranda.html"><i class="fas fa-home"></i> Beranda</a>
+                <a class="nav-link" href="TiketBaru.html"><i class="fas fa-ticket-alt"></i> Tiket Baru</a>
+                <a class="nav-link" href="TiketSaya.html"><i class="fas fa-tasks"></i> Tiket Saya</a>
+                <a class="nav-link active" href="TiketSelesai.html"><i class="fas fa-check-circle"></i> Tiket
+                    Selesai</a>
+            </nav>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <div class="back-button" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i> Kembali
+            </div>
+            <div class="ticket-header">
+                <div class="left-section">
+                    <img src="user.jpg" alt="User Photo">
+                    <div>
+                        <h5 id="ticketNumber"></h5>
+                        <p id="ticketCreated"></p>
+                        <p id="ticketIssue"></p>
+                    </div>
+                </div>
+                <div class="right-section">
+                    <div class="status resolve" id="ticketStatus">CLOSE</div>
+                </div>
+            </div>
+            <div class="ticket-body">
+                <img src="screenshot.jpg" alt="Screenshot" id="ticketImage">
+                <p id="ticketDescription"></p>
+            </div>
+            <div class="ticket-actions">
+                <div class="buttons">
+                    <button id="showChat">Tunjukkan Obrolan</button>
+                    <button id="showHistory">Riwayat</button>
+                </div>
+                <div class="history"></div>
+            </div>
+            <div id="chatBox" class="chat-box" style="display: none;">
+                <div class="chat-message user">
+                    <div class="message-content">
+                        Apakah membutuhkan informasi akun saya?
+                    </div>
+                    <div class="message-time">
+                        Rabu, 29 Desember 2021, 11:11 WIB
+                    </div>
+                </div>
+            </div>
+            <div class="rating">
+                <div class="rating-stars" id="ratingStars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <span id="ratingValue">Bagus</span>
+            </div>
+            <div class="rating-comment">
+                <textarea id="ratingComment" rows="4"
+                    style="width: 100%; border-radius: 8px; padding: 10px;"></textarea>
+            </div>
+            <div style="text-align: right; margin-top: 20px;">
+                <button id="submitRating"
+                    style="background-color: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 14px;">Nilai</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="tickets.js"></script>
+    <script>
+        document.getElementById('showChat').addEventListener('click', function () {
+            var chatBox = document.getElementById('chatBox');
+            chatBox.style.display = chatBox.style.display === 'none' ? 'block' : 'none';
+        });
+
+        document.getElementById('ratingStars').addEventListener('click', function (e) {
+            if (e.target.tagName === 'I') {
+                var stars = Array.from(document.querySelectorAll('#ratingStars i'));
+                var index = stars.indexOf(e.target);
+                stars.forEach(function (star, i) {
+                    if (i <= index) {
+                        star.style.color = '#ffc107';
+                    } else {
+                        star.style.color = '#ddd';
+                    }
+                });
+                var ratingValue = document.getElementById('ratingValue');
+                switch (index) {
+                    case 0:
+                        ratingValue.textContent = 'Sangat Buruk';
+                        break;
+                    case 1:
+                        ratingValue.textContent = 'Buruk';
+                        break;
+                    case 2:
+                        ratingValue.textContent = 'Cukup';
+                        break;
+                    case 3:
+                        ratingValue.textContent = 'Baik';
+                        break;
+                    case 4:
+                        ratingValue.textContent = 'Sangat Baik';
+                        break;
+                }
+            }
+        });
+
+        document.getElementById('submitRating').addEventListener('click', function () {
+            var comment = document.getElementById('ratingComment').value;
+            alert('Rating submitted: ' + comment);
+            // Here you can handle the rating submission logic
+        });
+
+        document.getElementById('userIcon').addEventListener('click', function () {
+            var dropdown = document.getElementById('userDropdown');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        });
+
+        function showModal() {
+            var myModal = new bootstrap.Modal(document.getElementById('userModal'), {
+                keyboard: false
+            });
+            myModal.show();
+            document.getElementById('userDropdown').style.display = 'none';
+        }
+
+        window.onclick = function (event) {
+            if (!event.target.matches('.fas.fa-user')) {
+                var dropdowns = document.getElementsByClassName("user-dropdown");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.style.display === 'block') {
+                        openDropdown.style.display = 'none';
+                    }
+                }
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Fungsi untuk mendapatkan ID tiket dari URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const ticketId = urlParams.get('id');
+
+            // Mencari tiket berdasarkan ID dan status 'close'
+            const ticket = tickets.find(t => t.id === ticketId && t.status.class === 'close');
+
+            if (ticket) {
+                // Memperbarui bagian header tiket
+                document.getElementById('ticketNumber').textContent = '#' + ticket.id;
+                document.getElementById('ticketCreated').textContent = 'Dibuat oleh ' + ticket.user + ' pada ' + ticket.startDate;
+                document.getElementById('ticketIssue').textContent = ticket.title;
+                document.getElementById('ticketStatus').textContent = ticket.status.name.toUpperCase();
+
+                // Memperbarui bagian body tiket
+                document.getElementById('ticketImage').src = ticket.image;
+                document.getElementById('ticketDescription').textContent = ticket.description;
+
+                // Memperbarui bagian actions tiket
+                document.querySelector('.ticket-actions .history').textContent = 'Pembaruan terakhir ' + ticket.endDate;
+            } else {
+                document.querySelector('.container').innerHTML = '<p>Tiket tidak ditemukan atau tidak berstatus "Close".</p>';
+            }
+        });
+    </script>
+</body>
+
+</html>
